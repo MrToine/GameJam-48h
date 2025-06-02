@@ -1,6 +1,6 @@
 {
-    "name": "Template.Runtime",
-    "rootNamespace": "Template.Runtime",
+    "name": "Ball",
+    "rootNamespace": "Ball",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
