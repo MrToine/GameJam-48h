@@ -1,3 +1,4 @@
+using Game;
 using UnityEngine;
 
 namespace Ball
@@ -22,36 +23,16 @@ namespace Ball
 
             private void Start()
             {
-                // Donner une vitesse initiale à la balle (diagonal vers le haut-droite)
-                Vector2 initialDirection = new Vector2(1f, -1f).normalized;
-                _rb.linearVelocity = initialDirection * _speedBall;
-            }
-
-            private void FixedUpdate()
-            {
-                Debug.DrawLine(transform.position, transform.position + (Vector3)_rb.linearVelocity, Color.red);
+                Invoke(nameof(SetRandomTrajectory), 1f);
             }
 
             private void OnCollisionEnter2D(Collision2D collision)
             {
-                
-                Vector2 normal = collision.contacts[0].normal;
-                Vector2 currentVelocity = _rb.linearVelocity;
-                
-                Vector2 reflectedVelocity = Vector2.Reflect(currentVelocity, normal);
-                
-                float minAngleRad = Mathf.Deg2Rad * 15f;
-
-                if (Mathf.Abs(reflectedVelocity.x) < minAngleRad || Mathf.Abs(reflectedVelocity.y) < minAngleRad)
+                if (collision.gameObject.layer == LayerMask.NameToLayer("DeathZone"))
                 {
-                    float newX = reflectedVelocity.x >= 0 ? Mathf.Sin(minAngleRad) : -Mathf.Sin(minAngleRad);
-                    float newY = reflectedVelocity.y >= 0 ? Mathf.Cos(minAngleRad) : -Mathf.Cos(minAngleRad);
-                    reflectedVelocity = new Vector2(newX, newY);
+                    Debug.Log("Game Over");
+                    Time.timeScale = 0;
                 }
-                
-                reflectedVelocity = reflectedVelocity.normalized * _speedBall;
-                
-                _rb.linearVelocity = reflectedVelocity;
             }
 
             #endregion
@@ -65,8 +46,15 @@ namespace Ball
 
     
             #region Utils
-    
-            /* Fonctions privées utiles */
+
+            private void SetRandomTrajectory()
+            {
+                Vector2 force = Vector2.zero;
+                force.x = Random.Range(-1f, 1f);
+                force.y = -1f;
+                
+                _rb.AddForce(force.normalized * (_speed + _acceleration));
+            }
     
             #endregion
     
@@ -74,9 +62,10 @@ namespace Ball
             #region Privates and Protected
 
             private Rigidbody2D _rb;
+            [SerializeField] private PublicGame _publicGame;
+            [SerializeField] private float _speed = 500f;
+            [SerializeField] private float _acceleration = 5f;
 
-            [SerializeField] private float _speedBall = 1.5f;
-            
             #endregion
     }
 }

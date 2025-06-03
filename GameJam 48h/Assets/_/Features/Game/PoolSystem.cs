@@ -33,20 +33,39 @@ namespace Game
                 OnGetFromPool,
                 OnReleaseToPool,
                 OnDestroyObstacle,
-                maxSize: _maxObstacles
+                maxSize: 9999
             );
+
+            _pool = new List<GameObject>();
         }
 
         #endregion
-    
-
+        
 
         #region Main Methods
 
-        public void SpawnObstacle(Vector2 position)
+        public Obstacle.Obstacle SpawnObstacle(Vector2 position)
         {
             Obstacle.Obstacle obstacle = _obstaclePool.Get();
             obstacle.transform.position = position;
+            _pool.Add(obstacle.gameObject);
+            
+            return obstacle;
+        }
+
+        public List<GameObject> GetAllInactiveObstacles()
+        {
+            List<GameObject> inactiveList = new List<GameObject>();
+
+            foreach (GameObject obs in _pool)
+            {
+                if (!obs.activeInHierarchy)
+                {
+                    inactiveList.Add(obs);
+                }
+            }
+            
+            return inactiveList;
         }
     
         #endregion
@@ -82,8 +101,9 @@ namespace Game
         #region Privates and Protected
 
         private IObjectPool<Obstacle.Obstacle> _obstaclePool;
+        private List<GameObject> _pool;
         [SerializeField] private Obstacle.Obstacle _objectPrefab;
-        [SerializeField] private int _maxObstacles;
+        //[SerializeField] private int _maxObstacles;
 
         #endregion
     }
