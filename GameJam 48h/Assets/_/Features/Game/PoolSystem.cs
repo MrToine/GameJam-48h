@@ -28,7 +28,7 @@ namespace Game
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Awake()
         {
-            _obstaclePool = new ObjectPool<Obstacle.Obstacle>(
+            _obstaclePool = new ObjectPool<GameObject>(
                 CreateObstacle,
                 OnGetFromPool,
                 OnReleaseToPool,
@@ -53,9 +53,9 @@ namespace Game
 
         #region Main Methods
 
-        public Obstacle.Obstacle SpawnObstacle(Vector2 position)
+        public GameObject SpawnObstacle(Vector2 position)
         {
-            Obstacle.Obstacle obstacle = _obstaclePool.Get();
+            GameObject obstacle = _obstaclePool.Get();
             obstacle.transform.position = position;
             _pool.Add(obstacle.gameObject);
             
@@ -98,19 +98,19 @@ namespace Game
             return bonus;
         }
 
-        private Obstacle.Obstacle CreateObstacle()
+        private GameObject CreateObstacle()
         {
-            Obstacle.Obstacle obs = Instantiate(_objectPrefab);
-            obs.SetPool(_obstaclePool);
+            GameObject obs = Instantiate(_objectPrefab);
+            obs.GetComponentInChildren<Obstacle.Obstacle>().SetPool(_obstaclePool);
             return obs;
         }
 
-        private void OnGetFromPool(Obstacle.Obstacle obstacle)
+        private void OnGetFromPool(GameObject obstacle)
         {
             obstacle.gameObject.SetActive(true);
         }
 
-        private void OnReleaseToPool(Obstacle.Obstacle obstacle)
+        private void OnReleaseToPool(GameObject obstacle)
         {
             obstacle.gameObject.SetActive(false);
         }
@@ -125,7 +125,7 @@ namespace Game
             bns.gameObject.SetActive(false);
         }
 
-        private void OnDestroyObstacle(Obstacle.Obstacle instance)
+        private void OnDestroyObstacle(GameObject instance)
         {
             Destroy(instance.gameObject);
         }
@@ -140,11 +140,11 @@ namespace Game
     
         #region Privates and Protected
 
-        private IObjectPool<Obstacle.Obstacle> _obstaclePool;
+        private IObjectPool<GameObject> _obstaclePool;
         private IObjectPool<Bonus.BonusObject> _bonusPool;
         private List<GameObject> _pool;
         private List<GameObject> _poolBonus;
-        [SerializeField] private Obstacle.Obstacle _objectPrefab;
+        [SerializeField] private GameObject _objectPrefab;
         [SerializeField] private Bonus.BonusObject _bonusPrefab;
         //[SerializeField] private int _maxObstacles;
 

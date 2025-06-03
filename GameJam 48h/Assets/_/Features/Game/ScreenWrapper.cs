@@ -39,7 +39,6 @@ namespace Game
             // Update is called once per frame
             private void Update()
             {
-                Debug.Log($"Left: {_leftBound}, Right: {_rightBound}, PlayerX: {_player.position.x}");
                 float buffer = 0.1f;
                 float playerX = _player.position.x;
                 

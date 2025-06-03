@@ -27,7 +27,7 @@ namespace Game
             {
                 float lineHeight = 0;
                 float maxWidth = _publicGame.CameraWidth;
-                float baseX = -maxWidth / 2f;
+                float baseX = (-maxWidth / 2f) + 0.2f;
                 float baseY = Camera.main.orthographicSize + 25f; // POSI Y DES ELEMENTS DE POOL
                 float currentX = baseX;
                 float currentY = baseY;
@@ -40,16 +40,13 @@ namespace Game
                 {
                     int randomSpawnBonus = Random.Range(0, 100);
                     GameObject obsGO;
-                    Obstacle.Obstacle obsObstacle = null;
+                    GameObject obsObstacle = null;
                     Bonus.BonusObject obsBonus = null;
 
                     if (randomSpawnBonus >= _probabilityBonus && randomSpawnBonus <= 100)
                     {
-                        Debug.Log("Création d'un obstacle");
                         obsObstacle = _poolManager.SpawnObstacle(new Vector3(1000, 1000, 0));
-                        Debug.Log("OBS = "  + obsObstacle);
                         obsGO = obsObstacle.gameObject;
-                        Debug.Log("OBSGO = " + obsGO);
                     }
                     else
                     {
@@ -57,21 +54,19 @@ namespace Game
                         obsBonus = _poolManager.SpawnBonus(new Vector3(1000, 1000, 0));
                         Debug.Log("OBS = "  + obsBonus);
                         obsGO = obsBonus.gameObject;
-                        obsBonus.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
                         Debug.Log("OBSGO = "  + obsGO);
                         _nbBonusAsSpawned++;
                     }
                     
-                    Debug.Log("Spawn : " + obsGO);
-                    
-                    Renderer renderer = obsGO.GetComponent<Renderer>();
+                    Renderer renderer = obsGO.GetComponentInChildren<Renderer>();
+                    Debug.Log(renderer);
                     if (renderer == null) continue;
 
                     Vector3 size = renderer.bounds.size;
                     float width = size.x;
                     float height = size.y;
 
-                    if (currentX + width > baseX + maxWidth)
+                    if (currentX + width > baseX + maxWidth * 0.90f)
                     {
                         currentX = baseX;
                         currentY -= maxHeightInLine + spaceY;
@@ -102,7 +97,6 @@ namespace Game
                     _timer = _linesDescentDelay;
                 }
                 //CheckInactivesBricks();
-                Debug.Log($"Il y a {_poolManager.GetAllInactiveObstacles().Count} briques désactivées");
             }
 
             #endregion
@@ -154,15 +148,15 @@ namespace Game
                 }
 
                 float currentX = baseX;
-                float currentY = startY + pooledObjects[0].GetComponent<Renderer>().bounds.size.y + spaceY;
+                float currentY = startY + pooledObjects[0].GetComponentInChildren<Renderer>().bounds.size.y + spaceY;
                 float maxHeightInLine = 0f;
 
                 foreach (var obj in pooledObjects)
                 {
-                    Obstacle.Obstacle obs = obj.GetComponent<Obstacle.Obstacle>();
+                    GameObject obs = obj.GetComponentInChildren<GameObject>();
                     if (!obs) continue;
 
-                    Renderer renderer = obs.GetComponent<Renderer>();
+                    Renderer renderer = obs.GetComponentInChildren<Renderer>();
                     if (!renderer) continue;
 
                     Vector3 size = renderer.bounds.size;
@@ -192,9 +186,17 @@ namespace Game
             private void DownTheLines()
             {
                 Debug.Log("Down the lines");
-                foreach (Obstacle.Obstacle obs in _obstaclesList)
+                foreach (GameObject obs in _obstaclesList)
                 {
-                    obs.transform.position += Vector3.down * obs.GetComponent<Renderer>().bounds.size.y;
+                    Debug.Log(obs.name);
+                    Renderer renderer = obs.GetComponentInChildren<Renderer>();
+                    if (!renderer)
+                    {
+                        Debug.LogError($"{obs.name} n'a pas de Renderer...");
+                        continue;
+                    }
+                    Debug.Log($"Renderer : {renderer.gameObject.name}");
+                    obs.transform.position += Vector3.down * renderer.bounds.size.y;
                 }
             }
     
@@ -206,7 +208,7 @@ namespace Game
             private PoolSystem _poolManager;
             private PublicGame _publicGame;
             private float _timer;
-            private List<Obstacle.Obstacle> _obstaclesList = new List<Obstacle.Obstacle>();
+            private List<GameObject> _obstaclesList = new List<GameObject>();
             private List<GameObject> _objectsInteractable = new List<GameObject>();
             private int _nbBonusAsSpawned = 0;
             private float _lastLineY = 0;
