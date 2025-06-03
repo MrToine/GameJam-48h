@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d2e9983a751849059e84c6b1caf5aba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nbObstacles: 900
+  _nbObstacles: 1
   _linesDescentDelay: 10
 --- !u!114 &4868581960351125209
 MonoBehaviour:
