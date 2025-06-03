@@ -1,7 +1,7 @@
 {
     "name": "Ball",
     "rootNamespace": "Ball",
-    "references": [],
+    "references": ["GUID:0c859d0963fcc454baed7e047bb40422"],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
