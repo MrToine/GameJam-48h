@@ -473,6 +473,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654a5376f6e4a4e06ae64bf18886ba5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onHit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2717123743418169554, guid: 839daa53c02784a74a76a3bcc6a0d78b, type: 3}
+        m_TargetAssemblyTypeName: Game.GameManager, Game
+        m_MethodName: AddScore
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 10
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _parent: {fileID: 6676574987705560582}
   _delayToDestroy: 0.5
 --- !u!1 &6676574987705560582

@@ -1,13 +1,14 @@
 using System;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.Events;
 
 namespace Obstacle
 {
     public class Obstacle : MonoBehaviour
     {
         #region Publics
-
+        
         public static float Width => _objectWidth;
         public static float Height => _objectHeight;
             
@@ -33,6 +34,7 @@ namespace Obstacle
                 ActivateAtlas();
                 Invoke(nameof(DeactivateAtlas), 1);
                 gameObject.SetActive(false);
+                _onHit.Invoke();
             }
         }
         
@@ -90,7 +92,10 @@ namespace Obstacle
         private IObjectPool<GameObject> _pool;
         private static float _objectWidth;
         private static float _objectHeight;
+
+        [SerializeField] private UnityEvent _onHit;
         [SerializeField] private GameObject _parent;
+        
         [Header("Gestion (Délai avant destruction des restes de brique)")]
         [SerializeField] private float _delayToDestroy;
 

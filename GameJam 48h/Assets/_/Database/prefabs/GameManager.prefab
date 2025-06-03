@@ -60,8 +60,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d2e9983a751849059e84c6b1caf5aba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _scoreText: {fileID: 8589546521013566870, guid: 95c424a92a4e55343a697b633194871f, type: 3}
   _nbObstacles: 1
   _linesDescentDelay: 10
+  _nbBonus: 0
+  _probabilityBonus: 0
 --- !u!114 &4868581960351125209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,4 +79,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_objectWidth: 0
   m_objectHeight: 0
-  _objectPrefab: {fileID: -9099013771362845621, guid: 2e81caa4eb5be46e0a153088987f0920, type: 3}
+  _objectPrefab: {fileID: 0}
+  _bonusPrefab: {fileID: 0}

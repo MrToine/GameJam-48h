@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using TMPro;
 
 namespace Game
 {
@@ -25,68 +26,74 @@ namespace Game
 
             private void Start()
             {
-                float lineHeight = 0;
                 float maxWidth = _publicGame.CameraWidth;
                 float baseX = (-maxWidth / 2f) + 0.2f;
-                float baseY = Camera.main.orthographicSize + 25f; // POSI Y DES ELEMENTS DE POOL
+                float baseY = Camera.main.orthographicSize + 20f;
+
                 float currentX = baseX;
                 float currentY = baseY;
+
                 float spaceX = 0.05f;
                 float spaceY = 0.05f;
-                float maxHeightInLine = 0f;
+
                 _lastLineY = baseY;
-                
+
+                float brickWidth = 1f;
+                float brickHeight = 1f;
+
+                GameObject temp = _poolManager.SpawnObstacle(Vector3.one * 1000);
+                Renderer tempRenderer = temp.GetComponentInChildren<Renderer>();
+                if (tempRenderer != null)
+                {
+                    brickWidth = tempRenderer.bounds.size.x;
+                    brickHeight = tempRenderer.bounds.size.y;
+                }
+                temp.SetActive(false);
+
                 for (int i = 0; i < _nbObstacles; i++)
                 {
-                    int randomSpawnBonus = Random.Range(0, 100);
                     GameObject obsGO;
                     GameObject obsObstacle = null;
                     GameObject obsBonus = null;
 
-                    if (randomSpawnBonus >= _probabilityBonus && randomSpawnBonus <= 100)
+                    int randomSpawnBonus = Random.Range(0, 100);
+                    bool isBonus = randomSpawnBonus < _probabilityBonus;
+
+                    if (isBonus)
                     {
-                        obsObstacle = _poolManager.SpawnObstacle(new Vector3(1000, 1000, 0));
-                        obsGO = obsObstacle.gameObject;
+                        obsBonus = _poolManager.SpawnBonus(Vector3.one * 1000);
+                        obsGO = obsBonus;
+                        _nbBonusAsSpawned++;
                     }
                     else
                     {
-                        Debug.Log("Création d'un bonus");
-                        obsBonus = _poolManager.SpawnBonus(new Vector3(1000, 1000, 0));
-                        Debug.Log("OBS = "  + obsBonus);
-                        obsGO = obsBonus.gameObject;
-                        Debug.Log("OBSGO = "  + obsGO);
-                        _nbBonusAsSpawned++;
+                        obsObstacle = _poolManager.SpawnObstacle(Vector3.one * 1000);
+                        obsGO = obsObstacle;
                     }
-                    
-                    Renderer renderer = obsGO.GetComponentInChildren<Renderer>();
-                    Debug.Log(renderer);
-                    if (renderer == null) continue;
 
-                    Vector3 size = renderer.bounds.size;
-                    float width = size.x;
-                    float height = size.y;
+                    // Centrage parfait dans la case brique
+                    obsGO.transform.position = new Vector3(
+                        currentX + (brickWidth / 2),
+                        currentY - (brickHeight / 2),
+                        0f
+                    );
 
-                    if (currentX + width > baseX + maxWidth * 0.90f)
+                    currentX += brickWidth + spaceX;
+
+                    if (currentX + brickWidth > baseX + maxWidth * 0.85f)
                     {
                         currentX = baseX;
-                        currentY -= maxHeightInLine + spaceY;
+                        currentY -= brickHeight + spaceY;
                         _lastLineY = currentY;
-                        maxHeightInLine = 0f;
                     }
-                    
-                    if (height > maxHeightInLine)
-                    {
-                        maxHeightInLine = height;
-                    }
-                    float offsetY = (maxHeightInLine - height) / 2f;
-                    obsGO.transform.position = new Vector3(currentX + width / 2, currentY - height / 2 - offsetY, 0);
-                    currentX += width + spaceX;
+
                     if (obsObstacle != null)
                         _obstaclesList.Add(obsObstacle);
-                    
+
                     _objectsInteractable.Add(obsGO);
                 }
             }
+
 
             // Update is called once per frame
             void Update()
@@ -106,6 +113,12 @@ namespace Game
 
             #region Main Methods
 
+            public void AddScore(int value)
+            {
+                _score += value;
+                _scoreText.text = $"Score : {_score}";
+            }
+            
             public void BonusActivated()
             {
                 Debug.Log("Bonus activated");
@@ -123,6 +136,7 @@ namespace Game
 
     
             #region Utils
+            
             
             private void CheckInactivesBricks()
             {
@@ -213,6 +227,9 @@ namespace Game
             private List<GameObject> _objectsInteractable = new List<GameObject>();
             private int _nbBonusAsSpawned = 0;
             private float _lastLineY = 0;
+            private int _score;
+        
+            [SerializeField] private TMP_Text _scoreText;
             
             [Header("Briques (Nombre, delai entre chaque descente")]
             [SerializeField] private int _nbObstacles;
