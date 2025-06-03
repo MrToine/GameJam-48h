@@ -218,6 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4420775644333664123}
   - component: {fileID: 6395245035078119400}
+  - component: {fileID: 6162935509366637810}
   m_Layer: 0
   m_Name: BONUS_Brick_GEM_whole
   m_TagString: Untagged
@@ -295,6 +296,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6162935509366637810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2501843710006504370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf99aa92774dc4a01859eb9dae142666, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2649203943062890543
 GameObject:
   m_ObjectHideFlags: 0

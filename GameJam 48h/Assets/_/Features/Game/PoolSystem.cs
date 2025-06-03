@@ -36,7 +36,7 @@ namespace Game
                 maxSize: 9999
             );
             
-            _bonusPool = new ObjectPool<Bonus.BonusObject>(
+            _bonusPool = new ObjectPool<GameObject>(
                 CreateBonus,
                 OnGetFromBonusPool,
                 OnReleaseToBonusPool,
@@ -62,9 +62,9 @@ namespace Game
             return obstacle;
         }
         
-        public Bonus.BonusObject SpawnBonus(Vector2 position)
+        public GameObject SpawnBonus(Vector2 position)
         {
-            Bonus.BonusObject bns = _bonusPool.Get();
+            GameObject bns = _bonusPool.Get();
             bns.transform.position = position;
             _poolBonus.Add(bns.gameObject);
             
@@ -91,10 +91,10 @@ namespace Game
     
         #region Utils
 
-        private Bonus.BonusObject CreateBonus()
+        private GameObject CreateBonus()
         {
-            Bonus.BonusObject bonus = Instantiate(_bonusPrefab);
-            bonus.SetPool(_bonusPool);
+            GameObject bonus = Instantiate(_bonusPrefab);
+            bonus.GetComponentInChildren<Bonus.BonusObject>().SetPool(_bonusPool);
             return bonus;
         }
 
@@ -115,12 +115,12 @@ namespace Game
             obstacle.gameObject.SetActive(false);
         }
         
-        private void OnGetFromBonusPool(Bonus.BonusObject bns)
+        private void OnGetFromBonusPool(GameObject bns)
         {
             bns.gameObject.SetActive(true);
         }
 
-        private void OnReleaseToBonusPool(Bonus.BonusObject bns)
+        private void OnReleaseToBonusPool(GameObject bns)
         {
             bns.gameObject.SetActive(false);
         }
@@ -130,7 +130,7 @@ namespace Game
             Destroy(instance.gameObject);
         }
         
-        private void OnDestroyBonus(Bonus.BonusObject instance)
+        private void OnDestroyBonus(GameObject instance)
         {
             Destroy(instance.gameObject);
         }
@@ -141,11 +141,11 @@ namespace Game
         #region Privates and Protected
 
         private IObjectPool<GameObject> _obstaclePool;
-        private IObjectPool<Bonus.BonusObject> _bonusPool;
+        private IObjectPool<GameObject> _bonusPool;
         private List<GameObject> _pool;
         private List<GameObject> _poolBonus;
         [SerializeField] private GameObject _objectPrefab;
-        [SerializeField] private Bonus.BonusObject _bonusPrefab;
+        [SerializeField] private GameObject _bonusPrefab;
         //[SerializeField] private int _maxObstacles;
 
         #endregion

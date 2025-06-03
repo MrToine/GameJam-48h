@@ -42,7 +42,7 @@ namespace Bonus
 
             #region Main Methods
             
-            public void SetPool(IObjectPool<BonusObject> pool)
+            public void SetPool(IObjectPool<GameObject> pool)
             {
                 _pool = pool;
             }
@@ -59,7 +59,7 @@ namespace Bonus
     
             #region Privates and Protected
         
-            private IObjectPool<BonusObject> _pool;
+            private IObjectPool<GameObject> _pool;
 
             #endregion
     }

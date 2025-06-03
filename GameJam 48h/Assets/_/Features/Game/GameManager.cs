@@ -41,7 +41,7 @@ namespace Game
                     int randomSpawnBonus = Random.Range(0, 100);
                     GameObject obsGO;
                     GameObject obsObstacle = null;
-                    Bonus.BonusObject obsBonus = null;
+                    GameObject obsBonus = null;
 
                     if (randomSpawnBonus >= _probabilityBonus && randomSpawnBonus <= 100)
                     {
@@ -74,12 +74,13 @@ namespace Game
                         maxHeightInLine = 0f;
                     }
                     
-                    obsGO.transform.position = new Vector3(currentX + width / 2, currentY - height / 2, 0);
-                    currentX += width + spaceX;
                     if (height > maxHeightInLine)
                     {
                         maxHeightInLine = height;
                     }
+                    float offsetY = (maxHeightInLine - height) / 2f;
+                    obsGO.transform.position = new Vector3(currentX + width / 2, currentY - height / 2 - offsetY, 0);
+                    currentX += width + spaceX;
                     if (obsObstacle != null)
                         _obstaclesList.Add(obsObstacle);
                     
