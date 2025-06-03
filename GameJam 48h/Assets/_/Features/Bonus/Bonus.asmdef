@@ -1,10 +1,7 @@
 {
-    "name": "Game",
-    "rootNamespace": "Game",
-    "references": [
-        "GUID:c7ce0b869c1e942ef9d78687f4781afc",
-        "GUID:9de9dc82868c24d6f9eeadeda4925a20"
-    ],
+    "name": "Bonus",
+    "rootNamespace": "Bonus",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
