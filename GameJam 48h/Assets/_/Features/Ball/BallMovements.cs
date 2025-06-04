@@ -28,10 +28,11 @@ namespace Ball
 
             private void OnCollisionEnter2D(Collision2D collision)
             {
+                Debug.Log(collision.gameObject.name);
                 if (collision.gameObject.layer == LayerMask.NameToLayer("DeathZone"))
                 {
-                    Debug.Log("Game Over");
-                    Time.timeScale = 0;
+                    Debug.Log("GameOver");
+                    _gameManager.GameOver();
                 }
             }
 
@@ -65,7 +66,8 @@ namespace Ball
             [SerializeField] private PublicGame _publicGame;
             [SerializeField] private float _speed = 500f;
             [SerializeField] private float _acceleration = 5f;
-
+            [SerializeField] private GameManager _gameManager;
+            
             #endregion
     }
 }

@@ -101,7 +101,7 @@ namespace Game
         private GameObject CreateObstacle()
         {
             GameObject obs = Instantiate(_objectPrefab);
-            obs.GetComponentInChildren<Obstacle.Obstacle>().SetPool(_obstaclePool);
+            obs.GetComponentInChildren<Game.Obstacle>().SetPool(_obstaclePool);
             return obs;
         }
 

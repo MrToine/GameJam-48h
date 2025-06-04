@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.Events;
 
-namespace Obstacle
+namespace Game
 {
     public class Obstacle : MonoBehaviour
     {
@@ -33,8 +33,11 @@ namespace Obstacle
             {
                 ActivateAtlas();
                 Invoke(nameof(DeactivateAtlas), 1);
-                gameObject.SetActive(false);
-                _onHit.Invoke();
+                gameObject.SetActive(false); 
+                var go = GameObject.Find("GameManager");
+                if (go != null)
+                    Debug.Log("clink");
+                    go.GetComponent<Game.GameManager>().AddScore(10);
             }
         }
         
@@ -43,7 +46,6 @@ namespace Obstacle
             int i = 0;
             foreach (Transform child in _parent.transform)
             {
-                Debug.Log("ACTIVATION GO : " + child.name);
                 child.gameObject.SetActive(true);
 
                 Rigidbody2D rb = child.GetComponent<Rigidbody2D>();

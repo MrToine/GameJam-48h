@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 namespace Game
 {
@@ -28,7 +29,7 @@ namespace Game
             {
                 float maxWidth = _publicGame.CameraWidth;
                 float baseX = (-maxWidth / 2f) + 0.2f;
-                float baseY = Camera.main.orthographicSize + 20f;
+                float baseY = Camera.main.orthographicSize + 25f;
 
                 float currentX = baseX;
                 float currentY = baseY;
@@ -113,15 +114,38 @@ namespace Game
 
             #region Main Methods
 
+            public void QuitGame()
+            {
+                Application.Quit();
+            }
+
+            public void RestartLevel()
+            {
+                Time.timeScale = 1;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+
+            public void StartGame()
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
+
+            public void GameOver()
+            {
+                Time.timeScale = 0;
+                _menu.SetActive(true);
+            }
+
             public void AddScore(int value)
             {
+                Debug.Log("AddScore + " + value);
                 _score += value;
                 _scoreText.text = $"Score : {_score}";
+                Debug.Log($"Score : {_score}");
             }
             
             public void BonusActivated()
             {
-                Debug.Log("Bonus activated");
                 foreach (GameObject obsGO in _objectsInteractable)
                 {
                     if (obsGO.transform.position.x >= _lastLineY + 0.1f &&
@@ -200,17 +224,13 @@ namespace Game
 
             private void DownTheLines()
             {
-                Debug.Log("Down the lines");
                 foreach (GameObject obs in _obstaclesList)
                 {
-                    Debug.Log(obs.name);
                     Renderer renderer = obs.GetComponentInChildren<Renderer>();
                     if (!renderer)
                     {
-                        Debug.LogError($"{obs.name} n'a pas de Renderer...");
                         continue;
                     }
-                    Debug.Log($"Renderer : {renderer.gameObject.name}");
                     obs.transform.position += Vector3.down * renderer.bounds.size.y;
                 }
             }
@@ -237,6 +257,7 @@ namespace Game
             [Header("Bonus (Nombre, propabilité de spawn en %")]
             [SerializeField] private float _nbBonus;
             [SerializeField] private float _probabilityBonus;
+            [SerializeField] private GameObject _menu;
 
             #endregion
     }
